@@ -68,10 +68,16 @@ namespace ensys {
 
 		Entities suitable_entities;
 
+		// checks whether the given entity should be added to or removed from the system and acts accordingly
 		void check(const Entity& entity);
 
+		// adds an entity to the system and invokes on_entity_added
 		void add(const Entity& entity);
+		// removes an entity from the system and invokes on_entity_added
 		void remove(const Entity& entity);
+
+		// removes all entities from the system and invokes on_entity_removed accordingly
+		void remove_all_entities();
 
 		// initializes the system
 		// invoked after the system has been added to a world

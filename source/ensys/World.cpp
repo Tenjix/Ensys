@@ -253,6 +253,7 @@ namespace ensys {
 		auto iterator = systems.find(system_type);
 		unique_ptr<System>& system = iterator->second;
 		system->terminate();
+		system->remove_all_entities();
 		Systems& list = priorities[system->priority];
 		list.erase(find(list.begin(), list.end(), system.get()));
 		systems.erase(iterator);

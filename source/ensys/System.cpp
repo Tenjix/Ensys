@@ -66,6 +66,16 @@ namespace ensys {
 		return suitable_entities.size();
 	}
 
+	void System::remove_all_entities() {
+		auto iterator = suitable_entities.begin();
+		while (iterator != suitable_entities.end()) {
+			Entity entity = *iterator++;
+			trace("removing ", entity, " from ", *this);
+			suitable_entities.erase(iterator);
+			on_entity_removed(entity);
+		}
+	}
+
 	ostream& operator<<(ostream& output, const System& system) {
 		return (output << Type(typeid(system)));
 	}
