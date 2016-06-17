@@ -9,10 +9,10 @@ using namespace std;
 namespace ensys {
 
 	Entity::Entity(World& world, Entity::Id id) : id(id), world(world) {
-		name(this);
-		tag(this);
-		is_active(this);
-		is_existing(this);
+		name._property_owner(this);
+		tag._property_owner(this);
+		is_active._property_owner(this);
+		is_existing._property_owner(this);
 	}
 
 	Entity::Entity(const Entity& entity) : Entity(entity.world, entity.id) {}

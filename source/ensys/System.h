@@ -15,6 +15,7 @@ namespace ensys {
 
 		friend class World;
 
+		bool active;
 		bool get_is_initialized() const;
 		bool get_is_active() const;
 
@@ -41,6 +42,12 @@ namespace ensys {
 
 		ReadonlyValueProperty<bool, System, &System::get_is_initialized> is_initialized;
 		ReadonlyValueProperty<bool, System, &System::get_is_active> is_active;
+
+		// activates this entity, including it in system updates
+		void activate();
+
+		// deactivates this entity, excluding it from system updates
+		void deactivate();
 
 		// returns the world this system blongs to
 		//const World& get_world() const;

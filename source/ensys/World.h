@@ -133,10 +133,16 @@ namespace ensys {
 		void remove();
 
 		template <class SystemType>
+		bool has() const;
+
+		template <class SystemType>
 		SystemType& get() const;
 
 		template <class SystemType>
-		bool has() const;
+		void activate();
+
+		template <class SystemType>
+		void deactivate();
 
 		// returns the number of systems within the world
 		uint get_number_of_systems() const;
@@ -218,6 +224,24 @@ namespace ensys {
 		Type type = typeid(SystemType);
 		runtime_assert(has(type), "a system of type ", type, " doesn't exist in this world, can't retreive it");
 		return static_cast<SystemType&>(get(type));
+	}
+
+	// activates a system, enabling updates
+	template<class SystemType>
+	inline void World::activate() {
+		static_assert(std::is_base_of<System, SystemType>(), "given type is not a system, can't activate it");
+		Type type = typeid(SystemType);
+		runtime_assert(has(type), "a system of type ", type, " doesn't exist in this world, can't activate it");
+		get(type).activate();
+	}
+
+	// deactivates a system, disabling updates
+	template<class SystemType>
+	inline void World::deactivate() {
+		static_assert(std::is_base_of<System, SystemType>(), "given type is not a system, can't deactivate it");
+		Type type = typeid(SystemType);
+		runtime_assert(has(type), "a system of type ", type, " doesn't exist in this world, can't activate it");
+		get(type).deactivate();
 	}
 
 }

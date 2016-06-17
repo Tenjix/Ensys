@@ -13,7 +13,7 @@ namespace ensys {
 		for (auto& entry : priorities) {
 			auto& systems = entry.second;
 			for (System* system : systems) {
-				system->update(delta_time);
+				if (system->is_active) system->update(delta_time);
 			}
 		}
 	}
@@ -240,20 +240,24 @@ namespace ensys {
 
 	void World::add(Type system_type, System*const system) {
 		trace("adding ", system_type, " (", system->filter, ") to ", *this);
-		system->world(this);
+		system->world._property_initialize(this);
 		priorities[system->priority].push_back(system);
 		systems.emplace(system_type, system);
 		system->initialize();
 		update_entities(*system);
 		trace("added ", system->get_number_of_entities(), " entities to ", system_type);
+		system->activate();
 	}
 
 	void World::remove(Type system_type) {
 		trace("removing ", system_type, " from ", *this);
 		auto iterator = systems.find(system_type);
 		unique_ptr<System>& system = iterator->second;
-		system->terminate();
+		system->deactivate();
+		auto number_of_entities = system->get_number_of_entities();
 		system->remove_all_entities();
+		trace("removed ", number_of_entities, " entities from ", system_type);
+		system->terminate();
 		Systems& list = priorities[system->priority];
 		list.erase(find(list.begin(), list.end(), system.get()));
 		systems.erase(iterator);

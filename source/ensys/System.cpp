@@ -10,6 +10,8 @@ namespace ensys {
 
 	System::System(Priority priority) : priority(priority) {
 		trace("constructing system");
+		is_initialized._property_owner(this);
+		is_active._property_owner(this);
 	};
 
 	System::~System() noexcept {
@@ -25,7 +27,7 @@ namespace ensys {
 	}
 
 	void System::check(const Entity& entity) {
-		if (not entity.is_active()) {
+		if (not entity.is_active) {
 			remove(entity);
 			return;
 		}
@@ -52,6 +54,14 @@ namespace ensys {
 			suitable_entities.erase(iterator);
 			on_entity_removed(entity);
 		}
+	}
+
+	void System::activate() {
+		active = true;
+	}
+
+	void System::deactivate() {
+		active = false;
 	}
 
 	const Entities& System::get_entities() const {
@@ -87,7 +97,7 @@ namespace ensys {
 	}
 
 	bool System::get_is_active() const {
-		return is_initialized and true; // todo: implement system deactivation
+		return is_initialized and active;
 	}
 
 }
