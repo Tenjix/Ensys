@@ -190,9 +190,7 @@ namespace ensys {
 	Optional<ComponentType> Entity::has() const {
 		static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't determine if entity has it");
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't determine components");
-		shared<ComponentType> component = std::static_pointer_cast<ComponentType>(has(typeid(ComponentType)));
-		if (component == nullptr) return Optional<ComponentType>();
-		return Optional<ComponentType>(*component);
+		return std::static_pointer_cast<ComponentType>(has(typeid(ComponentType)));
 	}
 
 	// checks whether this entity shares a component of the given type with other entities
