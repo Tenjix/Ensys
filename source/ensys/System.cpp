@@ -10,8 +10,8 @@ namespace ensys {
 
 	System::System(Priority priority) : priority(priority) {
 		trace("constructing system");
-		is_initialized._property_owner(this);
-		is_active._property_owner(this);
+		is_initialized.owner = this;
+		is_active.owner = this;
 	};
 
 	System::~System() noexcept {

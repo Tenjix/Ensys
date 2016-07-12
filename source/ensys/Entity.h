@@ -19,11 +19,11 @@ namespace ensys {
 
 		friend class World;
 
-		const String& get_name() const;
-		const String& set_name(Assignment<String>);
+		String& get_name() const;
+		void set_name(Assignment<String>);
 
-		const String& get_tag() const;
-		const String& set_tag(Assignment<String>);
+		String& get_tag() const;
+		void set_tag(Assignment<String>);
 
 		bool get_is_active() const;
 		bool get_is_existing() const;
@@ -45,13 +45,13 @@ namespace ensys {
 		Entity& operator=(Entity&&) = delete;
 
 		// the entities name
-		UnrestrictedReferenceProperty<String, Entity, &Entity::get_name, &Entity::set_name> name;
+		ByReferenceProperty<String, Entity, &Entity::get_name, &Entity::set_name> name;
 		// the entities tag
-		UnrestrictedReferenceProperty<String, Entity, &Entity::get_tag, &Entity::set_tag> tag;
+		ByReferenceProperty<String, Entity, &Entity::get_tag, &Entity::set_tag> tag;
 		// checks whether this entity is existing and active
-		ReadonlyValueProperty<bool, Entity, &Entity::get_is_active> is_active;
+		ReadonlyByValueProperty<bool, Entity, &Entity::get_is_active> is_active;
 		// checks whether this entity is existing
-		ReadonlyValueProperty<bool, Entity, &Entity::get_is_existing> is_existing;
+		ReadonlyByValueProperty<bool, Entity, &Entity::get_is_existing> is_existing;
 
 		// activates this entity, including it in system updates
 		void activate();

@@ -9,10 +9,10 @@ using namespace std;
 namespace ensys {
 
 	Entity::Entity(World& world, Entity::Id id) : id(id), world(world) {
-		name._property_owner(this);
-		tag._property_owner(this);
-		is_active._property_owner(this);
-		is_existing._property_owner(this);
+		name.owner = this;
+		tag.owner = this;
+		is_active.owner = this;
+		is_existing.owner = this;
 	}
 
 	Entity::Entity(const Entity& entity) : Entity(entity.world, entity.id) {}
@@ -85,24 +85,24 @@ namespace ensys {
 
 	/// properties
 
-	const String& Entity::get_name() const {
+	String& Entity::get_name() const {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't get name");
 		return world.attributes[id].name;
 	}
 
-	const String& Entity::set_name(Assignment<String> assignment) {
+	void Entity::set_name(Assignment<String> assignment) {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't set name");
-		return assignment.to(world.attributes[id].name);
+		assignment.to(world.attributes[id].name);
 	}
 
-	const String& Entity::get_tag() const {
+	String& Entity::get_tag() const {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't get tag");
 		return world.attributes[id].tag;
 	}
 
-	const String& Entity::set_tag(Assignment<String> assignment) {
+	void Entity::set_tag(Assignment<String> assignment) {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't set tag");
-		return assignment.to(world.attributes[id].tag);
+		assignment.to(world.attributes[id].tag);
 	}
 
 	bool Entity::get_is_active() const {

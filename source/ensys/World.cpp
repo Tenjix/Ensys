@@ -42,7 +42,7 @@ namespace ensys {
 	Entity World::create_entity(const String& name, const function<void(Entity)>& function) {
 		trace("creating entity \"", name, "\" in ", *this);
 		Entity::Id id = entity_ids.acquire();
-		attributes.emplace(id, Attributes{ false, name });
+		attributes.emplace(id, Attributes { false, name });
 		Entity entity(*this, id);
 		entities.insert(entity);
 		if (function) function(entity);
@@ -240,7 +240,7 @@ namespace ensys {
 
 	void World::add(Type system_type, System*const system) {
 		trace("adding ", system_type, " (", system->filter, ") to ", *this);
-		system->world._property_initialize(this);
+		system->world.pointer = this;
 		priorities[system->priority].push_back(system);
 		systems.emplace(system_type, system);
 		system->initialize();

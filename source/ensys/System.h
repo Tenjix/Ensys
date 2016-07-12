@@ -38,10 +38,10 @@ namespace ensys {
 		virtual ~System() noexcept;
 
 		// the world this system exists in
-		ReadonlyPointerProperty<World> world;
+		ReadonlyPointerProperty<World, World> world;
 
-		ReadonlyValueProperty<bool, System, &System::get_is_initialized> is_initialized;
-		ReadonlyValueProperty<bool, System, &System::get_is_active> is_active;
+		ReadonlyByValueProperty<bool, System, &System::get_is_initialized> is_initialized;
+		ReadonlyByValueProperty<bool, System, &System::get_is_active> is_active;
 
 		// activates this entity, including it in system updates
 		void activate();
