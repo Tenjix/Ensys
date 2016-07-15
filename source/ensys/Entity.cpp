@@ -85,7 +85,7 @@ namespace ensys {
 
 	/// properties
 
-	String& Entity::get_name() const {
+	const String& Entity::get_name() const {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't get name");
 		return world.attributes[id].name;
 	}
@@ -95,7 +95,7 @@ namespace ensys {
 		assignment.to(world.attributes[id].name);
 	}
 
-	String& Entity::get_tag() const {
+	const String& Entity::get_tag() const {
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't get tag");
 		return world.attributes[id].tag;
 	}

@@ -14,6 +14,7 @@ namespace ensys {
 	class System {
 
 		friend class World;
+		friend class ObservableComponent;
 
 		bool active;
 		bool get_is_initialized() const;
@@ -98,6 +99,7 @@ namespace ensys {
 
 		virtual void on_entity_added(const Entity& entity) {}
 		virtual void on_entity_removed(const Entity& entity) {}
+		virtual void on_entity_modified(const Entity& entity) {}
 
 	};
 

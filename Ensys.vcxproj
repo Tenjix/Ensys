@@ -141,9 +141,9 @@
   <ItemGroup>
     <ClInclude Include="source\ensys\Attributes.h" />
     <ClInclude Include="source\ensys\Component.h" />
-    <ClInclude Include="source\ensys\Namespace.h" />
     <ClInclude Include="source\ensys\Entity.h" />
     <ClInclude Include="source\ensys\IDs.h" />
+    <ClInclude Include="source\ensys\Observable.h" />
     <ClInclude Include="source\ensys\System.h" />
     <ClInclude Include="source\ensys\World.h" />
   </ItemGroup>

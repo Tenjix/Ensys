@@ -19,10 +19,10 @@ namespace ensys {
 
 		friend class World;
 
-		String& get_name() const;
+		const String& get_name() const;
 		void set_name(Assignment<String>);
 
-		String& get_tag() const;
+		const String& get_tag() const;
 		void set_tag(Assignment<String>);
 
 		bool get_is_active() const;
@@ -215,8 +215,8 @@ namespace ensys {
 namespace std {
 
 	template<>
-	struct hash<es::Entity> {
-		size_t operator()(const es::Entity& entity) const noexcept {
+	struct hash<ensys::Entity> {
+		size_t operator()(const ensys::Entity& entity) const noexcept {
 			size_t hash_prime = 92821;
 			return hash_prime + hash<uint>()(entity.id);
 		}

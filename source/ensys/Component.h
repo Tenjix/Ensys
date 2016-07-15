@@ -3,14 +3,14 @@
 #include <memory>
 #include <vector>
 
-#include <ensys/Namespace.h>
-
 #include <utilities/Logging.h>
 #include <utilities/Standard.h>
 
 namespace ensys {
 
-	struct Component {
+	class Component {
+
+	public:
 
 		Component() {
 			trace("constructing component [", this, "]");
@@ -19,9 +19,6 @@ namespace ensys {
 		virtual	~Component() noexcept {
 			trace("destructing component [", this, "]");
 		}
-
-		//Component& operator=(const Component&) = delete;
-		//Component& operator=(Component&&) = delete;
 
 	};
 

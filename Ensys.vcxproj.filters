@@ -33,7 +33,7 @@
     <ClInclude Include="source\ensys\World.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="source\ensys\Namespace.h">
+    <ClInclude Include="source\ensys\Observable.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

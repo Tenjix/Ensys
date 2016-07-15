@@ -16,6 +16,10 @@
 #include <utilities/Assertions.h>
 #include <utilities/Types.h>
 
+#ifndef ENSYS_NO_NAMESPACE_ALIAS
+namespace es = ensys;
+#endif
+
 namespace ensys {
 
 	class World final {
