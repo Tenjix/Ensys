@@ -18,12 +18,14 @@ namespace ensys {
 	Entity::Entity(const Entity& entity) : Entity(entity.world, entity.id) {}
 	Entity::Entity(Entity&& entity) : Entity(entity.world, entity.id) {}
 
-	void Entity::activate() {
+	Entity& Entity::activate() {
 		world.activate_entity(*this);
+		return *this;
 	}
 
-	void Entity::deactivate() {
+	Entity& Entity::deactivate() {
 		world.deactivate_entity(*this);
+		return *this;
 	}
 
 	void Entity::destroy() {

@@ -46,16 +46,21 @@ namespace ensys {
 	Entity World::create_entity(const String& name, const function<void(Entity)>& function) {
 		trace("creating entity \"", name, "\" in ", *this);
 		Entity::Id id = entity_ids.acquire();
-		attributes.emplace(id, Attributes { false, name });
 		Entity entity(*this, id);
 		entities.insert(entity);
+		auto& entity_attributes = attributes[id];
+		entity_attributes.name = name;
+		entity_attributes.active = true;
 		if (function) {
 			disable_system_checks = true;
 			function(entity);
 			disable_system_checks = false;
 		}
 		trace("created ", entity, " with ", entity.get_number_of_components(), " components");
-		activate_entity(entity);
+		if (entity_attributes.active) {
+			entity_attributes.active = false;
+			activate_entity(entity);
+		}
 		return entity;
 	}
 

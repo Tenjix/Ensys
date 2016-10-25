@@ -54,10 +54,10 @@ namespace ensys {
 		ReadonlyByValueProperty<bool, Entity, &Entity::get_is_existing> is_existing;
 
 		// activates this entity, including it in system updates
-		void activate();
+		Entity& activate();
 
 		// deactivates this entity, excluding it from system updates
-		void deactivate();
+		Entity& deactivate();
 
 		// destroys this entity with all its components
 		void destroy();
