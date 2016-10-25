@@ -126,7 +126,6 @@ namespace ensys {
 		auto& components = world.components[id];
 		auto iterator = components.find(component_type);
 		runtime_assert(iterator != components.end(), *this, " doesn't have a component of type ", component_type, ", can't remove it");
-		auto component = iterator->second;
 		components.erase(iterator);
 		world.update_systems(*this);
 	}

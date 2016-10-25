@@ -42,6 +42,8 @@ namespace ensys {
 
 		const String name;
 
+		bool disable_system_checks = false;
+
 	public:
 
 		explicit World(String name = "World", uint initial_entity_pool_size = 1000);
@@ -161,8 +163,8 @@ namespace ensys {
 
 	private:
 
-		void update_systems(Entity& entity);
-		void update_entities(System& system);
+		void update_systems(const Entity& entity);
+		void update_system(System& system);
 
 		Entity find_entity(const std::function<bool(const Attributes&)>& accepts) const;
 		Entities find_entities(const std::function<bool(const Attributes&)>& accepts) const;

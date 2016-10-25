@@ -27,6 +27,7 @@ namespace ensys {
 	}
 
 	void System::check(const Entity& entity) {
+		trace(*this, " check ", entity);
 		if (not entity.is_active) {
 			remove(entity);
 			return;
@@ -39,19 +40,15 @@ namespace ensys {
 	}
 
 	void System::add(const Entity& entity) {
-		auto iterator = find(suitable_entities.begin(), suitable_entities.end(), entity);
-		if (iterator == suitable_entities.end()) {
+		if (suitable_entities.insert(entity).second) {
 			trace("adding ", entity, " to ", *this);
-			suitable_entities.insert(entity);
 			on_entity_added(entity);
 		}
 	}
 
 	void System::remove(const Entity& entity) {
-		auto iterator = find(suitable_entities.begin(), suitable_entities.end(), entity);
-		if (iterator != suitable_entities.end()) {
+		if (suitable_entities.erase(entity)) {
 			trace("removing ", entity, " from ", *this);
-			suitable_entities.erase(iterator);
 			on_entity_removed(entity);
 		}
 	}

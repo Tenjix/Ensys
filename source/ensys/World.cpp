@@ -18,14 +18,18 @@ namespace ensys {
 		}
 	}
 
-	void World::update_systems(Entity& entity) {
+	void World::update_systems(const Entity& entity) {
+		if (disable_system_checks) return;
+		trace("update systems with ", entity);
 		for (auto& entry : systems) {
 			System& system = *entry.second;
 			system.check(entity);
 		}
 	}
 
-	void World::update_entities(System& system) {
+	void World::update_system(System& system) {
+		if (disable_system_checks) return;
+		trace("update system ", system);
 		for (auto& entity : entities) {
 			system.check(entity);
 		}
@@ -45,7 +49,11 @@ namespace ensys {
 		attributes.emplace(id, Attributes { false, name });
 		Entity entity(*this, id);
 		entities.insert(entity);
-		if (function) function(entity);
+		if (function) {
+			disable_system_checks = true;
+			function(entity);
+			disable_system_checks = false;
+		}
 		trace("created ", entity, " with ", entity.get_number_of_components(), " components");
 		activate_entity(entity);
 		return entity;
@@ -244,7 +252,7 @@ namespace ensys {
 		priorities[system->priority].push_back(system);
 		systems.emplace(system_type, system);
 		system->initialize();
-		update_entities(*system);
+		update_system(*system);
 		trace("added ", system->get_number_of_entities(), " entities to ", system_type);
 		system->activate();
 	}

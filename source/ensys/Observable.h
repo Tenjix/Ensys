@@ -40,7 +40,7 @@ namespace ensys {
 				auto system = entry.first;
 				auto& entities = entry.second;
 				for (auto& entity : entities) {
-					system->on_entity_modified(entity);
+					if (entity.is_active) system->on_entity_modified(entity);
 				}
 			}
 		}
