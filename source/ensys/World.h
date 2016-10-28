@@ -23,7 +23,7 @@ namespace ensys {
 		friend Entity;
 
 		using MappedAttributes = std::unordered_map<Entity::Id, Attributes>;
-		using MappedComponents = std::unordered_map<Entity::Id, std::unordered_map<Type, std::shared_ptr<Component>>>;
+		using MappedComponents = std::unordered_map<Entity::Id, std::unordered_map<Type, shared<Component>>>;
 		using MappedPriorities = std::map<System::Priority, std::vector<System*>, std::greater<System::Priority>>;
 		using MappedSystems = std::unordered_map<Type, std::unique_ptr<System>>;
 

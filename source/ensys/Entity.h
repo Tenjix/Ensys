@@ -87,6 +87,9 @@ namespace ensys {
 		ComponentType& get() const;
 
 		template <class ComponentType>
+		linked<ComponentType> get_reference() const;
+
+		template <class ComponentType>
 		Optional<ComponentType> has() const;
 
 		template <class ComponentType>
@@ -116,7 +119,7 @@ namespace ensys {
 		void add(Type component_type, const shared<Component>& component);
 		void remove(Type component_type);
 		const shared<Component>& has(Type component_type) const;
-		Component& get(Type component_type) const;
+		shared<Component>& get(Type component_type) const;
 
 	};
 
@@ -207,7 +210,15 @@ namespace ensys {
 	ComponentType& Entity::get() const {
 		static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't retrieve it from entity");
 		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't retreive components");
-		return static_cast<ComponentType&>(get(typeid(ComponentType)));
+		return static_cast<ComponentType&>(*get(typeid(ComponentType)));
+	}
+
+	// returns a linked pointer to the component of the given type owned by this entity
+	template <class ComponentType>
+	linked<ComponentType> Entity::get_reference() const {
+		static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't retrieve it from entity");
+		runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't retreive components");
+		return std::static_pointer_cast<ComponentType>(get(typeid(ComponentType)));
 	}
 
 }

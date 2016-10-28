@@ -132,20 +132,19 @@ namespace ensys {
 		world.update_systems(*this);
 	}
 
-	const shared_ptr<Component>& Entity::has(Type component_type) const {
+	const shared<Component>& Entity::has(Type component_type) const {
 		static const shared_ptr<Component> no_component;
 		auto& components = world.components[id];
 		auto iterator = components.find(component_type);
 		if (iterator == components.end()) return no_component;
-		auto& component = iterator->second;
-		return component;
+		return iterator->second;
 	}
 
-	Component& Entity::get(Type component_type) const {
+	shared<Component>& Entity::get(Type component_type) const {
 		auto& components = world.components[id];
 		auto iterator = components.find(component_type);
 		runtime_assert(iterator != components.end(), *this, " doesn't have a component of type ", component_type, ", can't retreive it");
-		return *iterator->second;
+		return iterator->second;
 	}
 
 }
