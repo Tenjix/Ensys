@@ -52,6 +52,7 @@ namespace ensys {
 
 		// returns the world this system blongs to
 		//const World& get_world() const;
+
 		// returns the of entities controlled by this system
 		const Entities& get_entities() const;
 		// returns the systems component type filter

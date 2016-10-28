@@ -108,11 +108,11 @@ namespace ensys {
 	}
 
 	bool Entity::get_is_active() const {
-		return world.is_active(*this);
+		return world.is_active(id);
 	}
 
 	bool Entity::get_is_existing() const {
-		return world.is_existing(*this);
+		return world.is_existing(id);
 	}
 
 	/// template implementation details
