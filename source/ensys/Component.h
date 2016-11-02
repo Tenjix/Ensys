@@ -1,27 +1,28 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
 #include <utilities/Logging.h>
 #include <utilities/Standard.h>
 
-namespace ensys {
+namespace tenjix {
 
-	class Component {
+	namespace ensys {
 
-	public:
+		class Component {
 
-		Component() {
-			trace("constructing component [", this, "]");
-		}
+		public:
 
-		virtual	~Component() noexcept {
-			trace("destructing component [", this, "]");
-		}
+			Component() {
+				trace("constructing component [", this, "]");
+			}
 
-	};
+			virtual	~Component() noexcept {
+				trace("destructing component [", this, "]");
+			}
 
-	using Components = std::vector<linked<Component>>;
+		};
+
+		using Components = Lot<linked<Component>>;
+
+	}
 
 }

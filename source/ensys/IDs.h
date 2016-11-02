@@ -1,53 +1,55 @@
 #pragma once
 
-#include <vector>
-
 #include <utilities/Types.h>
 
-namespace ensys {
+namespace tenjix {
 
-	class IDs {
+	namespace ensys {
 
-		// the initial pool size
-		uint initial_pool_size;
+		class IDs {
 
-		// the next id to be used (if there is no reusable id)
-		uint next_id = 1;
+			// the initial pool size
+			uint initial_pool_size;
 
-		// the list of reusable ids
-		std::vector<uint> reusable_ids;
+			// the next id to be used (if there is no reusable id)
+			uint next_id = 1;
 
-		// the list of all ids (true = existing id, false = reusable id)
-		std::vector<bool> ids;
+			// the list of reusable ids
+			Lot<uint> reusable_ids;
 
-	public:
+			// the list of all ids (true = existing id, false = reusable id)
+			Lot<bool> ids;
 
-		static const uint no_id = 0;
+		public:
 
-		explicit IDs(uint pool_size);
+			static const uint no_id = 0;
 
-		IDs(const IDs&) = delete;
-		IDs(IDs&&) = delete;
+			explicit IDs(uint pool_size);
 
-		IDs& operator=(const IDs&) = delete;
-		IDs& operator=(IDs&&) = delete;
+			IDs(const IDs&) = delete;
+			IDs(IDs&&) = delete;
 
-		// acquires a new id
-		uint acquire();
+			IDs& operator=(const IDs&) = delete;
+			IDs& operator=(IDs&&) = delete;
 
-		// announces the number of required new ids
-		void require(uint number_of_new_ids);
+			// acquires a new id
+			uint acquire();
 
-		// releases an id from the pool
-		void release(uint id);
+			// announces the number of required new ids
+			void require(uint number_of_new_ids);
 
-		// checks whether this id is existing
-		bool exists(uint id) const;
+			// releases an id from the pool
+			void release(uint id);
 
-		void clear();
+			// checks whether this id is existing
+			bool exists(uint id) const;
 
-		uint count() const;
+			void clear();
 
-	};
+			uint count() const;
+
+		};
+
+	}
 
 }
