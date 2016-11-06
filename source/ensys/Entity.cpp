@@ -132,18 +132,16 @@ namespace tenjix {
 			world.update_systems(*this);
 		}
 
-		const shared<Component>& Entity::has(Type component_type) const {
-			static const shared<Component> no_component;
+		bool Entity::has(Type component_type) const {
 			auto& components = world.components[id];
 			auto iterator = components.find(component_type);
-			if (iterator == components.end()) return no_component;
-			return iterator->second;
+			return iterator != components.end();
 		}
 
-		shared<Component>& Entity::get(Type component_type) const {
+		shared<Component> Entity::get(Type component_type) const {
 			auto& components = world.components[id];
 			auto iterator = components.find(component_type);
-			runtime_assert(iterator != components.end(), *this, " doesn't have a component of type ", component_type, ", can't retreive it");
+			if (iterator == components.end()) return shared<Component>();
 			return iterator->second;
 		}
 

@@ -5,7 +5,6 @@
 #include <ensys/Component.h>
 
 #include <utilities/Assertions.h>
-#include <utilities/Optional.h>
 #include <utilities/Properties.h>
 #include <utilities/Types.h>
 
@@ -83,13 +82,13 @@ namespace tenjix {
 			void remove();
 
 			template <class ComponentType>
+			bool has() const;
+
+			template <class ComponentType>
 			ComponentType& get() const;
 
 			template <class ComponentType>
-			linked<ComponentType> get_reference() const;
-
-			template <class ComponentType>
-			Optional<ComponentType> has() const;
+			shared<ComponentType> get_shared() const;
 
 			template <class ComponentType>
 			bool shares() const;
@@ -117,8 +116,8 @@ namespace tenjix {
 			/// template implementation details
 			void add(Type component_type, const shared<Component>& component);
 			void remove(Type component_type);
-			const shared<Component>& has(Type component_type) const;
-			shared<Component>& get(Type component_type) const;
+			bool has(Type component_type) const;
+			shared<Component> get(Type component_type) const;
 
 		};
 
@@ -189,10 +188,10 @@ namespace tenjix {
 
 		// checks whether this entity has a component of the given type
 		template <class ComponentType>
-		Optional<ComponentType> Entity::has() const {
+		bool Entity::has() const {
 			static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't determine if entity has it");
 			runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't determine components");
-			return std::static_pointer_cast<ComponentType>(has(typeid(ComponentType)));
+			return has(typeid(ComponentType));
 		}
 
 		// checks whether this entity shares a component of the given type with other entities
@@ -207,16 +206,18 @@ namespace tenjix {
 		// returns the component of the given type owned by this entity
 		template <class ComponentType>
 		ComponentType& Entity::get() const {
-			static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't retrieve it from entity");
-			runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't retreive components");
-			return static_cast<ComponentType&>(*get(typeid(ComponentType)));
+			static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't access it on entities");
+			runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't access components");
+			Type component_type = typeid(ComponentType);
+			auto component = get(component_type);
+			runtime_assert(component, *this, " doesn't have a component of type ", component_type, ", can't retreive it");
+			return static_cast<ComponentType&>(*component);
 		}
 
-		// returns a linked pointer to the component of the given type owned by this entity
 		template <class ComponentType>
-		linked<ComponentType> Entity::get_reference() const {
+		shared<ComponentType> Entity::get_shared() const {
 			static_assert(std::is_base_of<Component, ComponentType>(), "given type is not a component, can't retrieve it from entity");
-			runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't retreive components");
+			runtime_assert(is_existing(), "there is no existing entity with id #", id, " can't retrieve components");
 			return std::static_pointer_cast<ComponentType>(get(typeid(ComponentType)));
 		}
 

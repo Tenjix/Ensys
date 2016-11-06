@@ -8,11 +8,8 @@ namespace tenjix {
 
 		class IDs {
 
-			// the initial pool size
-			uint initial_pool_size;
-
 			// the next id to be used (if there is no reusable id)
-			uint next_id = 1;
+			uint next_id;
 
 			// the list of reusable ids
 			Lot<uint> reusable_ids;
@@ -22,9 +19,9 @@ namespace tenjix {
 
 		public:
 
-			static const uint no_id = 0;
+			static constexpr uint No_Id = 0;
 
-			explicit IDs(uint pool_size);
+			explicit IDs(uint initial_pool_size);
 
 			IDs(const IDs&) = delete;
 			IDs(IDs&&) = delete;

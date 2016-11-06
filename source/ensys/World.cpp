@@ -139,7 +139,7 @@ namespace tenjix {
 					return get_entity(id);
 				}
 			}
-			return get_entity(IDs::no_id);
+			return get_entity(IDs::No_Id);
 		}
 
 		Entities World::find_entities(const Function<bool(const Attributes&)>& accepts) const {
