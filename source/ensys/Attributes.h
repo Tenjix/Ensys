@@ -2,14 +2,18 @@
 
 #include <utilities/Standard.h>
 
-namespace ensys {
+namespace tenjix {
 
-	struct Attributes {
+	namespace ensys {
 
-		bool active;
-		String name;
-		String tag;
+		struct Attributes {
 
-	};
+			bool active;
+			String name;
+			String tag;
+
+		};
+
+	}
 
 }

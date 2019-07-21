@@ -4,80 +4,99 @@
 
 #include <utilities/Logging.h>
 
-using namespace std;
+namespace tenjix {
 
-namespace ensys {
+	namespace ensys {
 
-	System::System(Priority priority) : priority(priority) {
-		trace("constructing system");
-	};
+		System::System(Priority priority) : priority(priority) {
+			trace("constructing system");
+			is_initialized.owner = this;
+			is_active.owner = this;
+		};
 
-	System::~System() noexcept {
-		trace("destructing system");
-	}
-
-	void System::update(float delta_time) {
-		auto iterator = suitable_entities.begin();
-		while (iterator != suitable_entities.end()) {
-			Entity entity = *iterator++;
-			update(entity, delta_time);
+		System::~System() noexcept {
+			trace("destructing system");
 		}
-	}
 
-	void System::check(const Entity& entity) {
-		if (not entity.is_active()) {
-			remove(entity);
-			return;
+		void System::update(float delta_time) {
+			auto iterator = suitable_entities.begin();
+			while (iterator != suitable_entities.end()) {
+				Entity entity = *iterator++;
+				update(entity, delta_time);
+			}
 		}
-		if (filter.accepts(entity.get_component_types())) {
-			add(entity);
-		} else {
-			remove(entity);
+
+		void System::check(const Entity& entity) {
+			trace(*this, " check ", entity);
+			if (not entity.is_active) {
+				remove(entity);
+				return;
+			}
+			if (filter.accepts(entity.get_component_types())) {
+				add(entity);
+			} else {
+				remove(entity);
+			}
 		}
-	}
 
-	void System::add(const Entity& entity) {
-		auto iterator = find(suitable_entities.begin(), suitable_entities.end(), entity);
-		if (iterator == suitable_entities.end()) {
-			trace("adding ", entity, " to ", *this);
-			suitable_entities.insert(entity);
-			on_entity_added(entity);
+		void System::add(const Entity& entity) {
+			if (suitable_entities.insert(entity).second) {
+				trace("adding ", entity, " to ", *this);
+				on_entity_added(entity);
+			}
 		}
-	}
 
-	void System::remove(const Entity& entity) {
-		auto iterator = find(suitable_entities.begin(), suitable_entities.end(), entity);
-		if (iterator != suitable_entities.end()) {
-			trace("removing ", entity, " from ", *this);
-			suitable_entities.erase(iterator);
-			on_entity_removed(entity);
+		void System::remove(const Entity& entity) {
+			if (suitable_entities.erase(entity)) {
+				trace("removing ", entity, " from ", *this);
+				on_entity_removed(entity);
+			}
 		}
-	}
 
-	const Entities& System::get_entities() const {
-		return suitable_entities;
-	}
+		void System::activate() {
+			active = true;
+		}
 
-	const TypeFilter& System::get_filter() const {
-		return filter;
-	}
+		void System::deactivate() {
+			active = false;
+		}
 
-	uint System::get_number_of_entities() const {
-		return suitable_entities.size();
-	}
+		const Entities& System::get_entities() const {
+			return suitable_entities;
+		}
 
-	ostream& operator<<(ostream& output, const System& system) {
-		return (output << Type(typeid(system)));
-	}
+		const TypeFilter& System::get_filter() const {
+			return filter;
+		}
 
-	/// properties
+		uint System::get_number_of_entities() const {
+			return suitable_entities.size();
+		}
 
-	bool System::get_is_initialized() const {
-		return world != nullptr;
-	}
+		void System::remove_all_entities() {
+			auto iterator = suitable_entities.begin();
+			while (iterator != suitable_entities.end()) {
+				Entity entity = *iterator++;
+				trace("removing ", entity, " from ", *this);
+				suitable_entities.erase(iterator);
+				on_entity_removed(entity);
+			}
+		}
 
-	bool System::get_is_active() const {
-		return is_initialized and true; // todo: implement system deactivation
+		std::ostream& operator<<(std::ostream& output, const System& system) {
+			return (output << Type(typeid(system)));
+		}
+
+		/// properties
+
+		bool System::get_is_initialized() const {
+			return world != nullptr;
+		}
+
+		bool System::get_is_active() const {
+			return is_initialized and active;
+		}
+
 	}
 
 }
